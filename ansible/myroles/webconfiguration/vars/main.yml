@@ -1,0 +1,6 @@
+---
+# vars file for webconfiguration
+dcdir: "/var/www/sowji"
+httpport: 81
+
+

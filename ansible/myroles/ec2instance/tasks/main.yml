@@ -1,0 +1,20 @@
+---
+- name: "provisioning OS on AWS using Ansible"
+  ec2:
+       key_name: "mykey12345"
+       instance_type: "t2.micro"
+       image: "ami-0ebc1ac48dfd14136"
+       wait: yes
+       count: 1
+       instance_tags:
+          Name: aws_ansible_ec2
+       vpc_subnet_id: "subnet-b0030fd8"
+       assign_public_ip: yes
+       region: "ap-south-1"
+       state: present
+       group_id: "sg-3a771f5e"
+       aws_access_key: "{{	myuser	}}"
+       aws_secret_key: "{{	mypass	}}"
+  register: X
+- debug:
+     var:  X.instances[0].private_ip

@@ -1,0 +1,34 @@
+---
+# tasks file for webconfiguration
+- name : install httpd package
+  package :
+       name : "httpd"
+       state : present
+  when : ansible_distribution == "Redhat"
+  register : x
+
+- name : document root dir
+  file :
+       state : directory
+       dest : "{{ dcdir }}"
+  register : y
+     
+- name : conf web server
+  template :
+       dest : /etc/httpd:/conf.d/sowji.conf
+       src : templates/localconf.cong.conf.j2
+  when: x.rc == 0
+  tags : webconf
+  notify : service httpd
+
+- name : copy web page from url
+  get_url :
+       dest : "/var/www/sowji"
+       url : "https://github.com/Santu155/Python_LW_Training/blob/master/README.md"
+  when : y.failed == false
+     
+- name : start service for web
+  service :
+       name : "httpd"
+       state : started
+  
